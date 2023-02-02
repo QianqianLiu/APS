@@ -6,6 +6,10 @@
 ####### convert hgrid.gr3 fron lon/lat to UTM coords #######
 #generate lon and lat variables first
 
+
+from pylib import *
+
+
 gd = read_schism_hgrid('/home/bootk/Analysis/RUN02b/data/hgrid.gr3')
 gd.lon,gd.lat=gd.x,gd.y
 gd.x, gd.y = proj_pts(gd.lon, gd.lat,"epsg:4326", "epsg:26918") #Reassign x and y to be points, not lon/lat coords -- now 2 sets of variables
@@ -60,7 +64,7 @@ gd.write_hgrid('input/windrot_geo2proj.gr3',value=0.00)
 
 # 6. Also update vgrid.in: use gen_vqs.py
 # check paths of grd, vgrid.in and plot
-run gen_vqs.py
+os.system('run gen_vqs.py')
 
 # 7. Update bctides.in for the number of nodes along the open boundaries
 #### Can do this manually
