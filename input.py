@@ -42,7 +42,7 @@ gd.write_bnd()
 
 # 4. Append boundaries to end of hgrid file
 	
-cat grd.bnd >> input/hgrid.gr3 
+os.system('cat grd.bnd >> input/hgrid.gr3') 
 	
 #in mac, under ipython (do this before making any plot)
 mpl.use('QtAgg')
