@@ -26,4 +26,5 @@ scp -r *.nc hgrid.ll *.gr3 *.in tvd.prop tg876033@stampede2.tacc.utexas.edu:/wor
 scp -r input tg876033@stampede2.tacc.utexas.edu:/work2/08304/tg876033/stampede2/schism/APS/Input/RUN02b
 
 ######### Copy everything from work to scratch before running: ################
-# cp -r /work2/06713/lqq0622/stampede2/schism/APS/Input/RUN02a RUN02a
+
+cp -r /work2/06713/lqq0622/stampede2/schism/APS/Input/RUN02a RUN02a
