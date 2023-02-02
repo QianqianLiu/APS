@@ -62,13 +62,6 @@ gd.write_hgrid('input/windrot_geo2proj.gr3',value=0.00)
 # check paths of grd, vgrid.in and plot
 run gen_vqs.py
 
-# 7. To run in Stampede:
-# *** If permission access denied, QQ needs to allow permission using “chmod 755 foldername -R” ***
-#Copy recent experiment folder to new updated folder in work directory, and replace the old with the new grid files
-
-# —> move all needed files to to /data folder before moving entire folder to stampede
-#scp -r *.nc hgrid.ll *.gr3 *.in tvd.prop tg876033@stampede2.tacc.utexas.edu:/work2/08304/tg876033/stampede2/schism/APS/Input/RUN02b
-
 # 7. Update bctides.in for the number of nodes along the open boundaries
 #### Can do this manually
 
@@ -98,9 +91,13 @@ with open("input/source_sink.in", "w") as f:
 
 ## No need to change vsource.th, msource.th and boundary files.
 
+####### To run in Stampede:
+# *** If permission access denied, QQ needs to allow permission using “chmod 755 foldername -R” ***
+#Copy recent experiment folder to new updated folder in work directory, and replace the old with the new grid files
+
+#scp -r *.nc hgrid.ll *.gr3 *.in tvd.prop tg876033@stampede2.tacc.utexas.edu:/work2/08304/tg876033/stampede2/schism/APS/Input/RUN02b
+
 # 9. In stampede, copy everything from work to scratch before running:
 # cp -r /work2/06713/lqq0622/stampede2/schism/APS/Input/RUN02a RUN02a
        
-
-# ********** We find the points where each boundary begins and ends, put into text file optional, then input to the compute boundary command
-# Future: we don’t need to look up the boundary coordinates each time, just make sure to run the code again for each new .gr3 grid file. 
+# ********** Future: we don’t need to look up the boundary coordinates each time, just make sure to run the code again for each new .gr3 grid file. 
