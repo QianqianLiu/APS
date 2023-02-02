@@ -64,7 +64,7 @@ gd.write_hgrid('input/windrot_geo2proj.gr3',value=0.00)
 
 # 6. Also update vgrid.in: use gen_vqs.py
 # check paths of grd, vgrid.in and plot
-os.system('run gen_vqs.py')
+run gen_vqs.py
 
 # 7. Update bctides.in for the number of nodes along the open boundaries
 #### Can do this manually
