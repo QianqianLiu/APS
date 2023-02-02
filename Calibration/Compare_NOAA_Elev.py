@@ -2,6 +2,7 @@
 
 from pylib import *
 
+# For smaller scale tidal elevation comparison, spanning during Hurricane Dorian Aug - Sept 2019. 
 
 #obs = loadz("/home/liuq/Analysis/APS/database_Zhengui/elev/noaa_elev_msl.npz")
 obs = loadz("/home/liuq/Analysis/APS/database_Zhengui/elev/noaa_elev_navd.npz")
