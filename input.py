@@ -1,3 +1,5 @@
+from pylib import *
+
 ##### Generate new files for SCHISM model #####
 
 # Before running this code, generate .2dm grid in SMS, convert to hgrid.gr3 file, and put into a new /data folder in the working experiment directory
@@ -60,7 +62,7 @@ gd.write_hgrid('input/windrot_geo2proj.gr3',value=0.00)
 
 # 6. Also update vgrid.in: use gen_vqs.py
 # check paths of grd, vgrid.in and plot
-run gen_vqs.py
+os.system('ipython gen_vqs.py')
 
 # 7. Update bctides.in for the number of nodes along the open boundaries
 #### Can do this manually
