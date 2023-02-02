@@ -33,7 +33,7 @@ for st,sta in enumerate(stations):
     setp(gca(),xticks=xts, xticklabels=xls, xlim=[datenum(2019, 9, 3), datenum(2019, 9, 12)],ylim=[-1.2, 1.2])
     title("Station "+str(station_names[st]))
     plt.tight_layout()
-    plt.suptitle('Elevation Comparison at NOAA Stations - Sept 4-12, 2019', fontsize = 20)
+    plt.suptitle('Elevation Comparison at NOAA Stations - September 2019', fontsize = 20)
 
 show(block=False)
 
