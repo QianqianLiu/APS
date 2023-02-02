@@ -14,8 +14,6 @@ if not os.path.exists('input'):
    os.makedirs('input')
 
 gd.write_hgrid('input/hgrid.gr3') ## this will write the new hgrid.gr3 file
-### Ask QQ - How to rewrite hgrid file after changing from lat/lon to UTM
-#gd.write_hgrid('data/hgrid.gr3',value=0.1)
 
 #Reverse operation
 #gd.lon, gd.lat = proj_pts(gd.x, gd.y, "epsg:26918", "epsg:4326")
