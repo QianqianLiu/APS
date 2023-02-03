@@ -93,6 +93,8 @@ with open("input/source_sink.in", "w") as f:
 
 ## No need to change vsource.th, msource.th and boundary files.
 
+os.system('cp -a /home/liuq/schism/APS/RUN02a/bctides.in .')
+
 ####### To run in Stampede:
 # *** If permission access denied, QQ needs to allow permission using “chmod 755 foldername -R” ***
 #Copy recent experiment folder to new updated folder in work directory, and replace the old with the new grid files
