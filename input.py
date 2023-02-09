@@ -59,6 +59,10 @@ gd.write_hgrid('input/manning.gr3',value=0.02500000)
 gd.write_hgrid('input/watertype.gr3',value=1.00000)
 gd.write_hgrid('input/windrot_geo2proj.gr3',value=0.00)
 
+# Write tvd.prop file (relates upwind to tvd)
+	# gd.ne is part of the data structure gd (number of elements?)
+
+fid=open('input/tvd.prop','w+'); fid.writelines(['{} 1\n'.format(i+1) for i in arange(gd.ne)]); fid.close()
 
 # 6. Also update vgrid.in: use gen_vqs.py
 # check paths of grd, vgrid.in and plot
