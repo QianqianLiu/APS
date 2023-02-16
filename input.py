@@ -87,6 +87,7 @@ pas_x, pas_y = -76.17, 36.28
 new_x, new_y = -77.4, 34.7
 
 # compute all geometry information of hgrid
+gd = read_schism_hgrid('/home/bootk/Analysis/RUN02b/data/hgrid.gr3')
 gd.compute_all()
 
 #find nearest points of (pas_x, pas_y) in c_[gd.xctr,gd.yctr]

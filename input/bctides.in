@@ -3317,23 +3317,23 @@ n2
 0.001598 209.404008 0.006677 388.321589
 1.0 ! temp relax
 0.9 ! salt relax
-8 0 1 1 2 ! River 1 Chowan
+5 0 1 1 2 ! River 1 Chowan
 1.
 0.0
 1.
-8 0 1 1 2 ! River 2 Roanoke
+4 0 1 1 2 ! River 2 Roanoke
 1.
 0.0
 1.
-8 0 1 1 2 ! River 3 Pamlico
+5 0 1 1 2 ! River 3 Pamlico
 1.
 0.0
 1.
-6 0 1 1 2 ! River 4 Neuse
+5 0 1 1 2 ! River 4 Neuse
 1.
 0.0
 1.
-11 0 1 1 2 ! River 5 Cape Fear
+3 0 1 1 2 ! River 5 Cape Fear
 1.
 0.0
 1.
