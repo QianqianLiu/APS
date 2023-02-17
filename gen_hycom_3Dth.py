@@ -3,6 +3,13 @@
 from pylib import *
 close("all")
 
+
+gd=read_schism_hgrid('input/hgrid.gr3')
+gdl=read_schism_hgrid('input/hgrid.ll'); gd.lon,gd.lat=gdl.x,gdl.y #better method: gd.lon,gd.lat=proj_pts(...)
+vd=read_schism_vgrid('input/vgrid.in')
+s=zdata(); s.hgrid=gd; s.vgrid=vd; savez('grid.npz',s)
+
+
 #------------------------------------------------------------------------------
 #input
 #------------------------------------------------------------------------------
@@ -170,4 +177,4 @@ for n,sname in enumerate(snames):
     nd.time_series.dimname=('time','nOpenBndNodes','nLevels','nComponents')
     nd.time_series.val=vi.astype('float32')
 
-    WriteNC(sname,nd)
+    WriteNC('input/'+sname,nd)
