@@ -4,7 +4,7 @@ obs = loadz("/home/liuq/Analysis/APS/database_Zhengui/elev/noaa_elev_navd.npz")
 
 figure(figsize=[15, 6])
 xts,xls=get_xtick(fmt=2,xts=[datenum(2019,1,1),datenum(2019,12,31)],str='%d/%b')
-xts,xls=xts[::2],xls[::2]; xls[0]=xls[0]+', 2018'
+xts,xls=xts[::60],xls[::60]; xls[0]=xls[0]#+', 2018'# orig 2, not 60
 
 mod = loadz("/home/liuq/Analysis/APS/RUN02a/mod_at_noaa_stations.npz")
 stations= [8658120, 8658163, 8656483, 8654467, 8652587, 8651370];
