@@ -5,11 +5,12 @@ Generate new input files for SCHISM experiment - input.py
 We don’t need to look up the boundary coordinates each time as long as we are keeping the same boundary inputs, just make sure to run the code again for each new .gr3 grid file. 
 
 Before running input.py 
+
     1. generate .2dm grid in SMS
+    
     2. convert to hgrid.gr3 file using pylibs ** sms2gr3() ** command
             # # sms2grd('data/latest_mesh_name.2dm','data/hgrid.gr3')
-    3. put grid into a new /data folder in the working experiment directory and delete/archive old grid files in a /data_old folder for reference
-
+            
 After running input.py
 
 - Update bctides.in for the number of nodes along the open boundaries. #### Can do this manually
