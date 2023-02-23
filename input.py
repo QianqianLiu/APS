@@ -107,7 +107,7 @@ with open("input/source_sink.in", "w") as f:
 ## No need to change vsource.th, msource.th and boundary files.
 
 # os.system('cp -a /home/liuq/schism/APS/RUN02a/bctides.in input/')
-# We commented this out because requires manual update for each run w/ changes in the boundaries or grid. 
+# We commented this out because requires manual update for each run w/ changes in the boundaries or grid ; later we can update this to automatically change the bctides.in file with each update. 
 
 ####### To run in Stampede:
 # *** If permission access denied, QQ needs to allow permission using “chmod 755 foldername -R” ***
