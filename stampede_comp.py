@@ -14,6 +14,10 @@ time = array(C.time.val)
 uwind = array(C.uwind.val)
 vwind = array(C.vwind.val)
 
-#x=array(C.lon.val)
-#y=array(C.lat.val)
-#elev=array(C.elev.val)
+# load the station information
+
+# make a figure comparing the two
+
+figure(figsize=[15, 6])
+xts,xls=get_xtick(fmt=2,xts=[datenum(2019,8,1),datenum(2019,10,1)],str='%d/%b')
+xts,xls=xts[::2],xls[::2]; xls[0]=xls[0]+', 2018'
