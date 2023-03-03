@@ -3,18 +3,21 @@ from pylib import *
 # Check the atmospheric forcing (wind - sflux in netcdf format - either interpolate multiple stations for comparison, or pick the closest station) compared to observations - same method as comparison of results 
 # The SCHISM input files are located in sflux as .nc format, pull points from the grid using pylibs (ReadNC: read netcdf file content as zdata format and C.VINFO) compare to the NDBC station data, starting around the inlets. 
 
-C=ReadNC('/scratch/08304/tg876033/RUN02b/sflux/sflux_air_1.0001.nc')  
-C.VINFO #show variable informat
+nc=ReadNC('/scratch/08304/tg876033/RUN02b/sflux/sflux_air_1.0001.nc')  
+nc.VINFO #show variable informat
 
 #get variable values
 
-lat = array(C.lat.val)
-lon = array(C.lon.val)
-time = array(C.time.val)
-uwind = array(C.uwind.val)
-vwind = array(C.vwind.val)
+lat = array(nc.lat.val)
+lon = array(nc.lon.val)
+time = array(nc.time.val)
+uwind = array(nc.uwind.val)
+vwind = array(nc.vwind.val)
 
 # load the station information
+
+# Station HCGN7 - 8654467 - USCG Station Hatteras, NC
+# 35.209 N 75.704 W (35°12'31" N 75°42'15" W)
 
 # make a figure comparing the two
 
