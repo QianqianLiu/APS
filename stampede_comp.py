@@ -1,11 +1,11 @@
 from pylib import *
-import numpy
+import numpy as np
 
 # Check the atmospheric forcing (wind - sflux in netcdf format - either interpolate multiple stations for comparison, or pick the closest station) compared to observations - same method as comparison of results 
 # The SCHISM input files are located in sflux as .nc format, pull points from the grid using pylibs (ReadNC: read netcdf file content as zdata format and C.VINFO) compare to the NDBC station data, starting around the inlets. 
 
 nc=ReadNC('/scratch/08304/tg876033/RUN02b/sflux/sflux_air_1.0001.nc')  
-nc.VINFO #show variable informat
+nc.VINFO #show variable information
 
 #get variable values
 
@@ -15,14 +15,17 @@ time = array(nc.time.val)
 uwind = array(nc.uwind.val)
 vwind = array(nc.vwind.val)
 
-# load the station information
+########################################## Load the station information ############################################
 
 # Station HCGN7 - 8654467 - USCG Station Hatteras, NC
 # 35.209 N 75.704 W (35°12'31" N 75°42'15" W)
 
+
+######################################### Modify data for comparison #################################################
+
 lon_sta, lat_sta = -75.704, 35.209 #define station coordinates 
 distance = (lon - lon_sta)**2 + (lat - lat_sta)**2 # calculate the distance between the station coords and the nc file coords
-indx, indy = numpy.where(distance==distance.min()) # find the index of the minimum distance between the lat/lon positions
+indx, indy = np.where(distance==distance.min()) # find the index of the minimum distance between the lat/lon positions
 
 indx[0] # Display index for station lon/lat in the sflux nc file data 
 indy[0]
