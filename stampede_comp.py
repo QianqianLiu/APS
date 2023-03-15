@@ -15,12 +15,6 @@ nc.VINFO #show variable information
 lat = np.array(nc.lat.val)
 lon = np.array(nc.lon.val)
 
-########################################## Load the station information ############################################
-
-# Station HCGN7 - 8654467 - USCG Station Hatteras, NC
-# 35.209 N 75.704 W (35°12'31" N 75°42'15" W)
-
-
 ######################################### Modify and concatenate .nc data for comparison #################################################
 
 lon_sta, lat_sta = -75.704, 35.209 #define station coordinates 
@@ -57,14 +51,19 @@ input_wind = np.array([time, uwind, vwind]) # Combine input data to one array
 		#vwind:standard_name = "northward_wind" ;
 		#vwind:units = "m/s" ;
     
-
-##### NDBC data column info ######
+##################################################### NDBC station data ########################################################################
 
 # Three columns for each dataset - datenum/time, wind direction, speed -- convert mag and direction to uwind and vwind or other way to make consistent, then make two plots for vwind and uwind
 ## check for model inputs - are uwind and vwind the directions the wind is coming from, or the direction the wind is going?
 
 #WDIR	Wind direction (the direction the wind is coming from in degrees clockwise from true N) during the same period used for WSPD. See Wind Averaging Methods
 #WSPD	Wind speed (m/s) averaged over an eight-minute period for buoys and a two-minute period for land stations. Reported Hourly. See Wind Averaging Methods.
+
+########################################## Load the station information ############################################
+
+# Station HCGN7 - 8654467 - USCG Station Hatteras, NC
+# 35.209 N 75.704 W (35°12'31" N 75°42'15" W)
+
 
 ##################### Concatenate station data (Obs) to one array for comparison ################################
 
