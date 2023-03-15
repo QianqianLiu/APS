@@ -1,5 +1,6 @@
 from pylib import *
 import numpy as np
+import pandas as pd
 from datetime import datetime, timedelta
 
 # Check the atmospheric forcing (wind - sflux in netcdf format - either interpolate multiple stations for comparison, or pick the closest station) compared to observations - same method as comparison of results 
@@ -64,6 +65,18 @@ input_wind = np.array([time, uwind, vwind]) # Combine input data to one array
 # Station HCGN7 - 8654467 - USCG Station Hatteras, NC
 # 35.209 N 75.704 W (35°12'31" N 75°42'15" W)
 
+#hat = np.loadtxt("hcgn7h2019.txt")
+#print(sta_hat)
+
+hat = pd.read_table('hcgn7h2019.txt', delim_whitespace=True) # header=infer is auto setting
+print(hat)
+
+# Define three variables time, WDIR, and WSPD (no GST?)
+
+TIME = array(hat[:,2:5]) # all rows, columns 2:5 ############ ERROR HERE############## Problem with indexing
+#[hat.MM], [hat.DD], [hat.hh], [hat.mm]) # extract and combine time, problem here with the hashtag in front of YY column name, but everything is 2019 so I excluded it
+WDIR = array(hat.WDIR)
+WSPD = array(hat.WSPD)
 
 ##################### Concatenate station data (Obs) to one array for comparison ################################
 
