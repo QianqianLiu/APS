@@ -5,13 +5,15 @@ from datetime import datetime, timedelta
 # Check the atmospheric forcing (wind - sflux in netcdf format - either interpolate multiple stations for comparison, or pick the closest station) compared to observations - same method as comparison of results 
 # The SCHISM input files are located in sflux as .nc format, pull points from the grid using pylibs (ReadNC: read netcdf file content as zdata format and C.VINFO) compare to the NDBC station data, starting around the inlets. 
 
+### Download the input nc file from latest schism run
+
 nc=ReadNC('/scratch/08304/tg876033/RUN02b/sflux/sflux_air_1.0001.nc')  
 nc.VINFO #show variable information
 
-#get variable values
+##### get variable values
 
-lat = array(nc.lat.val)
-lon = array(nc.lon.val)
+lat = np.array(nc.lat.val)
+lon = np.array(nc.lon.val)
 
 ########################################## Load the station information ############################################
 
@@ -33,17 +35,14 @@ indy[0]
 # integrate all the wind from all the sflux nc files to make a time series of wind at that index to compare. Concatenate into one time series
 # make a figure comparing the two
 
-time = array(nc.time.val) # since prev day 00:00
+time = array(nc.time.val).astype(int) # since prev day 00:00
+uwind = array(nc.uwind.val[:, 200, 261]).astype(int) # Define uwind and vwind
+vwind = array(nc.vwind.val[:, 200, 261]).astype(int)
 
-uwind = array(nc.uwind.val[:, 200, 261])
-vwind = array(nc.vwind.val[:, 200, 261])
+input_wind = np.array([time, uwind, vwind]) # Combine input data to one array
 
-input_wind = np.array([time], [uwind], [vwind])
+##### ERROR HERE ####### ValueError: only 2 non-keyword arguments accepted
 
-arr = np.concatenate([input_wind, column_to_be_added], axis=1)
-
-# Three columns for each dataset - datenum/time, wind direction, speed -- convert mag and direction to uwind and vwind or other way to make consistent, then make two plots for vwind and uwind
-## check for model inputs - are uwind and vwind the directions the wind is coming from, or the direction the wind is going?
 
 ########### Can we write this as a function for future datasets?
 
@@ -61,8 +60,17 @@ arr = np.concatenate([input_wind, column_to_be_added], axis=1)
 
 ##### NDBC data column info ######
 
+# Three columns for each dataset - datenum/time, wind direction, speed -- convert mag and direction to uwind and vwind or other way to make consistent, then make two plots for vwind and uwind
+## check for model inputs - are uwind and vwind the directions the wind is coming from, or the direction the wind is going?
+
 #WDIR	Wind direction (the direction the wind is coming from in degrees clockwise from true N) during the same period used for WSPD. See Wind Averaging Methods
 #WSPD	Wind speed (m/s) averaged over an eight-minute period for buoys and a two-minute period for land stations. Reported Hourly. See Wind Averaging Methods.
+
+##################### Concatenate station data (Obs) to one array for comparison ################################
+
+sta_wind = np.array([time_sta, uwind_sta, vwind_sta]) # Assign station data and variables to this array after editing wind dir and speed 
+
+arr = np.concatenate([input_wind, column_to_be_added], axis=1) # concatenate the three variabes (time, uwind, vwind) into one numpy array for input file
 
 
 ###################### Matlab conversion ############################
@@ -71,9 +79,6 @@ arr = np.concatenate([input_wind, column_to_be_added], axis=1)
 # RperD=pi/180;
 # Ugeo2=-Wnd2.*sin(Wdir2*RperD);
 # Vgeo2=-Wnd2.*cos(Wdir2*RperD);
-
-##################### Concatenate station data (Obs) to one array for comparison ################################
-sta_wind = np.array([], [], []) # Assign station data and variables to this array after editing wind dir and speed 
 
 
 ####################### Make a Figure ##############################
