@@ -73,7 +73,7 @@ print(hat)
 
 # Define three variables time, WDIR, and WSPD (no GST?)
 
-TIME = array(hat[:,2:5]) # all rows, columns 2:5 ############ ERROR HERE############## Problem with indexing
+TIME = array(hat[:,2:5]) # all rows, columns 2:5 ############ ERROR HERE############## Problem with indexing -- check pylibs (similar to datenum) time manipulation section
 #[hat.MM], [hat.DD], [hat.hh], [hat.mm]) # extract and combine time, problem here with the hashtag in front of YY column name, but everything is 2019 so I excluded it
 WDIR = array(hat.WDIR)
 WSPD = array(hat.WSPD)
