@@ -61,7 +61,7 @@ gd.write_hgrid('input/windrot_geo2proj.gr3',value=0.00)
 
 # Write .ic (initial condition) files at constant value - may interpolate later, not important for pre-processing
 
-gd.write_hgrid('input/tem.ic',value=10) # Uniform starting temperature 10 C
+gd.write_hgrid('input/temp.ic',value=10) # Uniform starting temperature 10 C
 gd.write_hgrid('input/salt.ic',value=0) # Uniform starting salinity 0 psi
 
 # Write tvd.prop file (relates upwind to tvd)
