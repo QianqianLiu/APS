@@ -31,10 +31,13 @@ for st,sta in enumerate(stations):
     subplot(2,3,st+1)
     ind = (obs.station == sta) * ( obs.time >= datenum(2019, 1, 1) ) * (obs.time < datenum(2019, 12, 31)) # define station observations from 01/01 to 12/31 in 2019
     oyi=obs.elev[ind]; oyi=oyi-oyi.mean() # Assign the elevation observations 
-    plot(obs.time[ind], oyi, "r-") # Plot observation times (x) versus elev (y) as red line
+    foyi = lpfilt(oyi,1/24,0.2) # low pass filter on observation data -- 1/24 is hourly converted to daily
+    plot(obs.time[ind], foyi, "r-") # Plot observation times (x) versus elev (y) as red line
     
     myi=mod.elev[st,:]; myi=myi-myi.mean() # define model elevations
-    plot(mod.time + datenum(2019, 1, 1) + 00 / 24, myi,"b-") # plot model time (x) every 24 hours (??) with elevation (y) as blue line
+    fmyi = lpfilt(myi,1/24,0.2) # Low pass filter on station data
+    plot(mod.time + datenum(2019, 1, 1) + 00 / 24, fmyi,"b-") # plot model time (x) every 24 hours (??) with elevation (y) as blue line
+    # Observations always use UTC, but model used local time, however we changed model to UTC so there is no longer a 4 hour lag
     setp(gca(),xticks=xts, xticklabels=xls, xlim=[datenum(2019, 1, 1), datenum(2019, 12, 31)],ylim=[-1.2, 1.2])
     title("Station "+str(station_names[st]))
     plt.tight_layout()
