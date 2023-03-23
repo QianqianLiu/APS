@@ -43,8 +43,8 @@ for st,sta in enumerate(stations):
     coef=solve(mod.time+datenum(2019,1,1),myi,lat=34.2,nodal='False',trend='False',
             epoch='python',method='ols',conf_int='linear',Rayleigh_min=0.95) # harmonic analysis for model outputs based on tidal elevation
 
-    tide_obs=reconstruct(t,coef_obs) # 
-    tide=reconstruct(t,coef)
+    tide_obs=reconstruct(t,coef_obs,constit="M2") # 
+    tide=reconstruct(t,coef,constit='M2')
     plot(t,tide['h'],alpha=0.5,label='Modeled M2',color="b")
     plot(t,tide_obs['h'],alpha=0.5,label='Observed M2',color="r")
 
