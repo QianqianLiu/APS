@@ -32,13 +32,17 @@ for st,sta in enumerate(stations):
     ind = (obs.station == sta) * ( obs.time >= datenum(2019, 1, 1) ) * (obs.time < datenum(2019, 12, 31)) # define station observations from 01/01 to 12/31 in 2019
     oyi=obs.elev[ind]; oyi=oyi-oyi.mean() # Assign the elevation observations 
     foyi = lpfilt(oyi,1/24,0.2) # low pass filter on observation data -- 1/24 is hourly converted to daily
-    plot(obs.time[ind], foyi, "r-") # Plot observation times (x) versus elev (y) as red line
+    #soyi = smooth(oyi, 24)
+    plot(obs.time[ind], foyi, "r-") # Plot low pass filtered observation times (x) versus elev (y) as red line
+    #plot(obs.time[ind], soyi, "r-") # Plot smoothed obs - green line
     
     myi=mod.elev[st,:]; myi=myi-myi.mean() # define model elevations
-    fmyi = lpfilt(myi,1/24,0.2) # Low pass filter on station data
-    plot(mod.time + datenum(2019, 1, 1) + 00 / 24, fmyi,"b-") # plot model time (x) every 24 hours (??) with elevation (y) as blue line
+    fmyi = lpfilt(myi,1/24,0.2) # Low pass filter on model data
+    #smyi = smooth(myi, 24) # smooth filter on model data
+    plot(mod.time + datenum(2019, 1, 1) + 00 / 24, fmyi,"b-") # plot model time (x) every 24 hours (??) with filtered elevation (y) as blue line
     # Observations always use UTC, but model used local time, however we changed model to UTC so there is no longer a 4 hour lag
-    setp(gca(),xticks=xts, xticklabels=xls, xlim=[datenum(2019, 1, 1), datenum(2019, 12, 31)],ylim=[-1.2, 1.2])
+    #plot(mod.time + datenum(2019, 1, 1) + 00 / 24, smyi,"g-") # plot model time (x) every 24 hours (??) with smoothed elevation (y) as green line
+    setp(gca(),xticks=xts, xticklabels=xls, xlim=[datenum(2019, 1, 1), datenum(2019, 12, 31)],ylim=[-.4, .6])
     title("Station "+str(station_names[st]))
     plt.tight_layout()
     plt.suptitle('Elevation Comparison at NOAA Stations - 2019', fontsize = 20)
