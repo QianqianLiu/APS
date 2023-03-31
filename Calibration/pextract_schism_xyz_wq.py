@@ -12,15 +12,15 @@ import time
 #-----------------------------------------------------------------------------
 #Input
 #-----------------------------------------------------------------------------
-run='/home/liuq/schism/APS/RUN02a/'     #run dir containing outputs
-stacks=[1,72]                                    #stacks of schout_*.nc 
+run='/home/bootk/Analysis/RUN02b/'     #run dir containing outputs
+stacks=[1,73]                                    #stacks of schout_*.nc 
 sname='mod_at_ps_wq_stations'                             #name for results
 svars=['elev','salt','temp']        #SCHISM variables to be extracted
 rvars=['elev','salt','temp']          #rename variable names 
 #svars=['elev','hvel']
 #rvars=['elev','hvel']
 #bpfile='station_noaa.bp'  #file name of station.bp
-bpfile='../station_ps_wq.bp'  #stations in the pamlico sound water quality (ps_WQ_2021.xlsx)
+bpfile='station_ps_wq.bp'  #stations in the pamlico sound water quality (ps_WQ_2021.xlsx)
 icmb=1                  #icmb=0: work on uncombined; icmb=1: work on combined schout_*.nc
 ifs=1                   #ifs=1: depth relative to surface; ifs=0: fixed depth (z coordiante) 
 fmt=0                   #fmt=0: output as *.npz format; fmt=1: output as ASCII
