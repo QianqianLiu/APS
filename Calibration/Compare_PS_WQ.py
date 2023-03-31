@@ -6,8 +6,8 @@ lon_ps=c_[-76.47653, -76.42758,-76.34330,-76.26680,-76.20060,-76.24867,-76.22947
 lat_ps=c_[35.1201,35.15056667,35.13125,35.11841667,35.1225,35.08255,35.03205,35.02616667,35.09986667]
 
 
-S=loadz('../Obs/ModMon/PS_WQ_2021.npz')
-mod=loadz('mod_at_ps_wq_stations.npz')
+S=loadz('/home/bootk/Analysis/Obs/ModMon/PS_WQ_2021.npz')
+mod=loadz('/home/bootk/Analysis/mod_at_ps_wq_stations.npz')
 
 # make a sample plot
 figure(figsize=[16, 6])
@@ -26,7 +26,7 @@ for i in arange(9):
 
 
 show(block=False)
-savefig('Temperature_PS_WQ.png')
+savefig('Compare_Temp_PS_WQ_RUN02b.png')
 
 figure(figsize=[16, 6])
 xts,xls=get_xtick(fmt=2,xts=[datenum(2019,1,1),datenum(2019,12,30)],str='%d/%b')
@@ -43,5 +43,5 @@ for i in arange(9):
 
 
 show(block=False)
-savefig('Salt_PS_WQ.png')
+savefig('Compare_Salt_PS_WQ_RUN02b.png')
 
