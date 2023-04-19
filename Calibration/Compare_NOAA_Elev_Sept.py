@@ -11,7 +11,7 @@ figure(figsize=[15, 6])
 xts,xls=get_xtick(fmt=2,xts=[datenum(2019,8,1),datenum(2019,10,1)],str='%d/%b')
 xts,xls=xts[::2],xls[::2]; xls[0]=xls[0]+', 2018'
 
-mod = loadz("/home/liuq/Analysis/APS/RUN02a/mod_at_noaa_stations.npz")
+mod = loadz("/home/bootk/Analysis/mod_at_noaa_stations.npz")
 stations= [8658120, 8658163, 8656483, 8654467, 8652587, 8651370];
 
 station_names= ['WLON7, Wilmington, NC','JMPN7 - Wrightsville Beach, NC','BFTN7 Beaufort, NC','HCGN7 - USCG Station Hatteras, NC','ORIN7 - Oregon Inlet Marina, NC','DUKN7 - Duck Pier, NC'];
@@ -33,10 +33,10 @@ for st,sta in enumerate(stations):
     setp(gca(),xticks=xts, xticklabels=xls, xlim=[datenum(2019, 9, 3), datenum(2019, 9, 12)],ylim=[-1.2, 1.2])
     title("Station "+str(station_names[st]))
     plt.tight_layout()
-    plt.suptitle('Elevation Comparison at NOAA Stations - September 2019', fontsize = 20)
+    plt.suptitle('Elevation Comparison at NOAA Stations - September 2019 - RUN02b', fontsize = 20)
 
 show(block=False)
 
-savefig('Compare_Elev_Sept.png')
+savefig('Compare_Elev_Sept_RUN02b.png')
 
 
