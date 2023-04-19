@@ -45,5 +45,5 @@ for st,sta in enumerate(stations):
 
 show(block=False)
 
-savefig('Compare_Elev_2019.png')
+savefig('Compare_Elev_lpfilt_2019.png')
 
