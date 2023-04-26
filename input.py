@@ -121,7 +121,7 @@ with open("input/source_sink.in", "w") as f:
 # ********** Future: we don’t need to look up the boundary coordinates each time, just make sure to run the code again for each new .gr3 grid file. 
 
 ##### For atmospheric forcing
-# to generate NARR sflux: /home/liuq/schism/Sflux_2018/gen_narr_sflux.py and then make_sflux_links.py to make symbolic links
+# to generate NARR sflux: /home/liuq/Analysis/Sflux_2018/gen_narr_sflux.py and then make_sflux_links.py to make symbolic links
 
 ##### For hycome data download
 #/home/liuq/Analysis/hycom_2018/download_hycom.py

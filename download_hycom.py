@@ -6,9 +6,9 @@ close("all")
 #--------------------------------------------------------------------
 #input
 #--------------------------------------------------------------------
-StartT,EndT=datenum(2017,12,31),datenum(2019,1,1)
+StartT,EndT=datenum(2017,12,28),datenum(2019,1,1)
 xm=[-79,-73]; ym=[32.5,37]
-sdir='Data'
+sdir='../../hycom_2018/Data'
 
 #database
 url_1='http://ncss.hycom.org/thredds/ncss'; url_2='https://ncss.hycom.org/thredds/ncss'
