@@ -21,10 +21,17 @@ ps=loadz('/home/bootk/Analysis/Obs/ModMon/PS_WQ_2021.npz')
 ind2 = (ps.time >= datenum(2018, 12, 31)) * (ps.time <= datenum(2019, 1, 30))
 plot(ps.lon[ind2],ps.lat[ind2],'*r')
 
+ps.salt[ind2]
 
 
+C=ReadNC('input/hotstart.nc')
+tr_nd=C.tr_nd.val
 
+#temperature:
+temp=tr_nd[:,:,0]
 
+#salinity
+salt=tr_nd[:,:,1]
 
-
-
+ind=(gd.x<=-76) * (gd.y>=34.875) * (gd.y<35.75)
+salt[ind,:]=nan
