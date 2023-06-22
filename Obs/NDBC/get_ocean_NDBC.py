@@ -12,7 +12,7 @@ ddir='StationData_2019'
 #fnames=os.listdir('{}'.format(ddir));
 import glob
 fnames=glob.glob('{}/*2019_Ocean.txt'.format(ddir))
-stations=[41024,41037,41159,41064]
+stations=[41024,41037,41064]
 
 station=[]; otime=[]; temp=[]; salt=[]
 for f in arange(len(fnames)):
@@ -46,18 +46,17 @@ S.station=array(station)
 #S.lon=array([Lon[i] for i in S.station])
 save_npz('NDBC_NC_ocean',S)
 
-
 # make a sample plot
+
+sta = '41064'
 figure(figsize=[16, 6])
 xts,xls=get_xtick(fmt=2,xts=[datenum(2019,1,1),datenum(2019,12,30)],str='%d/%b')
 xts,xls=xts[::90],xls[::90]; xls[0]=xls[0]+', 2018'
-
-pd=(S.station=='41064')
+pd=(S.station==sta)
 plot(S.time[pd],S.salt[pd])
-setp(gca(),xticks=xts,xticklabels=xls,xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[25,35])
-title('NDBC station {}'.format(i+1))
-
-
+setp(gca(),xticks=xts,xticklabels=xls,xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[32,37])
+title('NDBC station {}'.format(sta))
 show(block=False)
+
 savefig('Salt_41064.png')
 
