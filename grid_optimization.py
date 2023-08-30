@@ -6,6 +6,14 @@ from pylib import *
 ## download the files in tif format
 ## use the following command to convert the files to npz format used by zhengui:
 
+import glob
+tiffiles = glob.glob('../NC_DEMs/*.tif')
+
+for file in tiffiles:
+    convert_dem_format(file,'oa.npz',fmt=1)
+    test=loadz('oa.npz')
+    levels=[]
+
 convert_dem_format('ncei19_nxxxx.tif','test.npz',fmt=1)
 
 #Then use the commands below to convert the bathymetry files to contours
