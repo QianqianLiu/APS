@@ -37,3 +37,36 @@ for le in levels:
 #the files will be saved as contours0/1/2/3/4/5/6_m5/4/3/2/1/0.shx/dbf/prj/shp files.
 #can combine multiple shapefiles
 
+gdffiles = glob.glob('../NC_DEMs/contour_m*.shp')
+
+
+### After getting the contours, import to SMS and make the feature arcs
+### After that, convert 2dm (generic model) to gr3 and then load DEMS files using the code below
+
+sms2grd('RUN03_11.2dm','hgrid.gr3')
+
+####### convert hgrid.gr3 fron lon/lat to UTM coords #######
+#generate lon and lat variables first
+gd = read_schism_hgrid('hgrid.gr3')
+gd.lon,gd.lat=gd.x,gd.y
+gd.x, gd.y = proj_pts(gd.lon, gd.lat,"epsg:4326", "epsg:26918") #Reassign x and y to be points, not lon/lat coords -- now 2 sets of variables
+
+import pandas as pd
+# the RUN03_depth.txt file is depth interpolated from VIMS grid
+depth = pd.read_csv('RUN03_Depth.txt', sep="\t", header=None)
+gd.dp=depth[0]
+
+import glob
+npzs = glob.glob('/home/liuq/NC_DEMs/npz/*.npz')
+
+for of,npzf in enumerate(npzs):
+    dep,sind=load_bathymetry(gd.lon,gd.lat,npzf,z=None,fmt=1)
+    gd.dp[sind]=-dep
+
+gd.plot(fmt=1,clim=[0,5])
+show(block=False)
+
+gd.write_hgrid('hgrid.gr3.new')
+
+
+
