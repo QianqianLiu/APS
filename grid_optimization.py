@@ -45,6 +45,17 @@ gdffiles = glob.glob('../NC_DEMs/contour_m*.shp')
 
 sms2grd('RUN03_11.2dm','hgrid.gr3')
 
+
+### code to convert all tif files to NPZ
+import glob
+tiffiles = glob.glob('/home/liuq/NC_DEMs/*.tif')
+
+for of,file in enumerate(tiffiles):
+    npzname='/home/liuq/NC_DEMs/npz/'+file[19:-4]+'.npz'
+    convert_dem_format(file,npzname,fmt=1)
+
+
+
 ####### convert hgrid.gr3 fron lon/lat to UTM coords #######
 #generate lon and lat variables first
 gd = read_schism_hgrid('hgrid.gr3')
