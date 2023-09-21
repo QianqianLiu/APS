@@ -55,10 +55,21 @@ for i,file in enumerate(usgs):
 # save result
 np.savetxt('{}'.format(sname),newset,fmt='%f')
 
+mond = [datenum(2018,i+1,1)-datenum(2018,1,1) for i in range(23)]
+Mond=np.array(mond); mons=Mond*24*3600
+datetime= num2date(mond+datenum(2018,1,1))
+Datestr=[datetime[i].strftime('%Y-%m') for i in range(23)]
+
+cols=['green','black','blue','red','lightgrey']
+labels=['Chowan River', 'roanoke', 'Tar', 'Neuse', 'Cape Fear and Black']
 #check result
 if pt == 1:
     fs=loadtxt(sname)
     for nn in arange(shape(fs)[1]-1):
-        plot(fs[:,0],fs[:,nn+1])
+        plt.plot(fs[:,0],-fs[:,nn+1],color=cols[nn],label=labels[nn])
+
+    plt.legend()
     xlabel('time (s)'); ylabel('River discharge (m^3/s)')
-    show()
+    setp(gca(),xticks=mons, xticklabels=Datestr)
+    xticks(rotation=70)
+    show(block=False)
