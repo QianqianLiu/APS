@@ -73,3 +73,14 @@ if pt == 1:
     setp(gca(),xticks=mons, xticklabels=Datestr)
     xticks(rotation=70)
     show(block=False)
+
+close('all')
+for nn in [2,3]:
+    plt.plot(fs[:,0],-fs[:,nn+1],color=cols[nn],label=labels[nn])
+
+plt.legend()
+xlabel('time (s)'); ylabel('River discharge (m^3/s)')
+setp(gca(),xticks=mons, xticklabels=Datestr)
+xticks(rotation=70)
+plt.grid()
+show(block=False)
