@@ -14,16 +14,26 @@ figure(figsize=[16, 6])
 xts,xls=get_xtick(fmt=2,xts=[datenum(2019,1,1),datenum(2019,12,30)],str='%d/%b')
 xts,xls=xts[::60],xls[::60]; xls[0]=xls[0]+', 2018'
 
+
+#mond = [datenum(2018,i+1,1)-datenum(2018,1,1) for i in range(23)]
+mond = [datenum(2018,i+1,1) for i in range(23)]
+Mond=np.array(mond); mons=Mond*24*3600
+datetime= num2date(Mond)#+datenum(2018,1,1))
+Datestr=[datetime[i].strftime('%Y-%m') for i in range(23)]
+
 for i in arange(9):
     print(i)
     subplot(3,3,i+1)
     pd=(S.station==i+1)*(S.depthcat==1)
-    plot(S.time[pd],S.temp[pd])
-    plot(mod.time+datenum(2019,1,1),mod.temp[i,:])
-    setp(gca(),xticks=xts,xticklabels=[],xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[10,36])
-    if i>=6: setp(gca(),xticks=xts,xticklabels=xls,xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[0,30])
+    plot(S.time[pd],S.temp[pd],'r*')
+    plot(mod.time+datenum(2019,1,1),mod.temp[i,:],'b')
+    #setp(gca(),xticks=xts,xticklabels=[],xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[10,36])
+    #if i>=6: setp(gca(),xticks=xts,xticklabels=xls,xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[0,30])
+    setp(gca(),xticks=Mond, xticklabels=[], xlim=[datenum(2018,1,1),datenum(2019,12,30)],ylim=[0,30])
+    if i>=6: setp(gca(),xticks=Mond,xticklabels=Datestr,xlim=[datenum(2018,1,1),datenum(2019,12,30)],ylim=[0,30])
+    xticks(rotation=70)
+    grid(linestyle = '--', linewidth = 0.5)
     title('PS WQ Sampling station {}'.format(i+1))
-
 
 show(block=False)
 savefig('Compare_Temp_PS_WQ_RUN02b.png')
@@ -35,10 +45,14 @@ for i in arange(9):
     print(i)
     subplot(3,3,i+1)
     pd=(S.station==i+1)*(S.depthcat==1)
-    plot(S.time[pd],S.salt[pd])
-    plot(mod.time+datenum(2019,1,1),mod.salt[i,:])
-    setp(gca(),xticks=xts,xticklabels=[],xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[10,36])
-    if i>=6: setp(gca(),xticks=xts,xticklabels=xls,xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[10,36])
+    plot(S.time[pd],S.salt[pd],'r*')
+    plot(mod.time+datenum(2019,1,1),mod.salt[i,:],'b')
+    #setp(gca(),xticks=xts,xticklabels=[],xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[10,36])
+    #if i>=6: setp(gca(),xticks=xts,xticklabels=xls,xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[10,36])
+    setp(gca(),xticks=Mond, xticklabels=[], xlim=[datenum(2018,1,1),datenum(2019,12,30)],ylim=[0,30])
+    if i>=6: setp(gca(),xticks=Mond,xticklabels=Datestr,xlim=[datenum(2018,1,1),datenum(2019,12,30)],ylim=[0,30])
+    xticks(rotation=70)
+    grid(linestyle = '--', linewidth = 0.5)
     title('PS WQ Sampling station {}'.format(i+1))
 
 
