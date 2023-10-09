@@ -14,7 +14,6 @@ figure(figsize=[16, 6])
 xts,xls=get_xtick(fmt=2,xts=[datenum(2019,1,1),datenum(2019,12,30)],str='%d/%b')
 xts,xls=xts[::60],xls[::60]; xls[0]=xls[0]+', 2018'
 
-
 #mond = [datenum(2018,i+1,1)-datenum(2018,1,1) for i in range(23)]
 mond = [datenum(2018,i+1,1) for i in range(23)]
 Mond=np.array(mond); mons=Mond*24*3600
