@@ -3,16 +3,24 @@ from pylib import *
 # Load obs station data
 obs = loadz("/home/liuq/Analysis/APS/database_Zhengui/elev/noaa_elev_navd.npz")
 
+# Define the years to extract and compare
+years = [2002, 2019]
+
 #Create figure
 figure(figsize=[15, 6])
+
+# Set the x axis "times" based on one year (will display ad day/month as per str.
 xts,xls=get_xtick(fmt=2,xts=[datenum(2019,1,1),datenum(2019,12,31)],str='%d/%b')
-xts,xls=xts[::60],xls[::60]; xls[0]=xls[0]#+', 2018'# orig 2, not 60
 
-###################################### Load model output data from station points; change address accordingly; this information needs to be extracted (pextract + stations.bp) before running this code!
+# Only show values/x axis points every 60 rows/2 months?? 
+xts,xls=xts[::60],xls[::60]; 
 
-#mod = loadz("/home/bootk/Analysis/mod_at_noaa_stations.npz")
+# This line supposedly redundant according to ChatGPT
+#xls[0]=xls[0]
 
-stations= [8658120, 8658163, 8656483, 8654467, 8652587, 8651370]; # NDBC Station numbers used for comparison
+# List of NDBC stations for comparison
+
+stations= [8658120, 8658163, 8656483, 8654467, 8652587, 8651370];
 
 # String of station names, same order as numbers, for figure labelling later
 
@@ -46,12 +54,16 @@ for st,sta in enumerate(stations):
     
     #plot(obs.time[ind], soyi, "r-") # Plot smoothed obs - green line
     
+    ######################## Plot model outputs (extracted previously)##############
+    
     #myi=mod.elev[st,:]; myi=myi-myi.mean() # define model elevations
-    fmyi = lpfilt(myi,1/24,0.2) # Low pass filter on model data
+    #fmyi = lpfilt(myi,1/24,0.2) # Low pass filter on model data
     #smyi = smooth(myi, 24) # smooth filter on model data
-    plot(mod.time + datenum(2019, 1, 1) + 00 / 24, fmyi,"b-") # plot model time (x) every 24 hours (??) with filtered elevation (y) as blue line
-    # Observations always use UTC, but model used local time, however we changed model to UTC so there is no longer a 4 hour lag
-    #plot(mod.time + datenum(2019, 1, 1) + 00 / 24, smyi,"g-") # plot model time (x) every 24 hours (??) with smoothed elevation (y) as green line
+    #plot(mod.time + datenum(2019, 1, 1) + 00 / 24, fmyi,"b-") # plot model time (x) every 24 hours (??) with filtered elevation (y) as blue line
+    
+# Observations always use UTC, but model used local time, however we changed model to UTC so there is no longer a 4 hour lag
+
+#plot(mod.time + datenum(2019, 1, 1) + 00 / 24, smyi,"g-") # plot model time (x) every 24 hours (??) with smoothed elevation (y) as green line
     setp(gca(),xticks=xts, xticklabels=xls, xlim=[datenum(2019, 1, 1), datenum(2019, 12, 31)],ylim=[-.4, .6])
     title("Station "+str(station_names[st]))
     plt.tight_layout()
@@ -59,9 +71,9 @@ for st,sta in enumerate(stations):
 
 show(block=False)
 
-<<<<<<< HEAD
+#<<<<<<< HEAD
 #savefig('Compare_Elev_lpfilt_2019.png')
-=======
-savefig('wl_compare_2002_2019.png')
->>>>>>> e30840967c5adef90fd0f41c4aefe233a92c7285
+#=======
+#savefig('wl_compare_2002_2019.png')
+#>>>>>>> e30840967c5adef90fd0f41c4aefe233a92c7285
 
