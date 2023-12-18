@@ -1,22 +1,7 @@
 from pylib import *
 
-# Load obs station data
-obs = loadz("/home/bootk/git_liu/APS/Obs/extract_noaa_sta_msl/noaa_elev_navd.npz")
-
 # Define the years to extract and compare
 years = [2002, 2019]
-
-#Create figure
-figure(figsize=[15, 6])
-
-# Set the x axis "times" based on one year (will display ad day/month as per str.
-xts,xls=get_xtick(fmt=2,xts=[datenum(2019,1,1),datenum(2019,12,31)],str='%b')
-
-# Only show values/x axis points every 60 rows/2 months?? 
-xts,xls=xts[::60],xls[::60]; 
-
-# This line supposedly redundant according to ChatGPT
-#xls[0]=xls[0]
 
 # List of NDBC stations for comparison
 
@@ -32,6 +17,21 @@ station_names= ['WLON7, Wilmington, NC','JMPN7 - Wrightsville Beach, NC','BFTN7 
 #8654467 (HCGN7, USCG Station Hatteras, NC),
 #8652587 (ORIN7, Oregon Inlet Marina, NC), and
 #8651370 (DUKN7, Duck Pier, NC).
+
+# Load obs station data
+obs = loadz("/home/bootk/git_liu/APS/Obs/extract_noaa_sta_msl/noaa_elev_navd.npz")
+
+#Create figure
+figure(figsize=[15, 6])
+
+# Set the x axis "times" based on one year (will display ad day/month as per str.
+xts,xls=get_xtick(fmt=2,xts=[datenum(2019,1,1),datenum(2019,12,31)],str='%b')
+
+# Only show values/x axis points every 60 rows/2 months?? 
+xts,xls=xts[::60],xls[::60]; 
+
+# This line supposedly redundant according to ChatGPT
+#xls[0]=xls[0]
 
 # Plot comparison
 # 6 total stations
