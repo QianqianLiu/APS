@@ -1,7 +1,7 @@
 from pylib import *
 
 # Load obs station data
-obs = loadz("/home/liuq/Analysis/APS/database_Zhengui/elev/noaa_elev_navd.npz")
+obs = loadz("/home/bootk/git_liu/APS/Obs/extract_noaa_sta_msl/noaa_elev_navd.npz")
 
 # Define the years to extract and compare
 years = [2002, 2019]
@@ -10,7 +10,7 @@ years = [2002, 2019]
 figure(figsize=[15, 6])
 
 # Set the x axis "times" based on one year (will display ad day/month as per str.
-xts,xls=get_xtick(fmt=2,xts=[datenum(2019,1,1),datenum(2019,12,31)],str='%d/%b')
+xts,xls=get_xtick(fmt=2,xts=[datenum(2019,1,1),datenum(2019,12,31)],str='%b')
 
 # Only show values/x axis points every 60 rows/2 months?? 
 xts,xls=xts[::60],xls[::60]; 
@@ -43,15 +43,17 @@ for st,sta in enumerate(stations):
     ind = (obs.station == sta) * ( obs.time >= datenum(2019, 1, 1) ) * (obs.time < datenum(2019, 12, 31))
 
     oyi=obs.elev[ind]; oyi=oyi-oyi.mean() # Assign the elevation observations 
-    
+
+##### Error here for lpfilt
     foyi = lpfilt(oyi,1/24,0.2) # low pass filter on observation data -- 1/24 is hourly converted to daily
     
     # Alternative smooth filter - not used
     #soyi = smooth(oyi, 24)
     
     # plot filtered observations time (x) versus elev(y) as red line
-    plot(obs.time[ind], foyi, "r-") 
     
+    # plot(obs.time[ind], oyi, "r-") 
+    plot(obs.time[ind], foyi, "b-")
     #plot(obs.time[ind], soyi, "r-") # Plot smoothed obs - green line
     
     ######################## Plot model outputs (extracted previously)##############
@@ -65,9 +67,10 @@ for st,sta in enumerate(stations):
 
 #plot(mod.time + datenum(2019, 1, 1) + 00 / 24, smyi,"g-") # plot model time (x) every 24 hours (??) with smoothed elevation (y) as green line
     setp(gca(),xticks=xts, xticklabels=xls, xlim=[datenum(2019, 1, 1), datenum(2019, 12, 31)],ylim=[-.4, .6])
+    plt.xticks(rotation=315)
     title("Station "+str(station_names[st]))
     plt.tight_layout()
-    plt.suptitle('Elevation Comparison at NOAA Stations - 2019 - RUN02b', fontsize = 20)
+    plt.suptitle(f'Elevation Comparison at NOAA Stations {years[0]} and {years[1]}', fontsize=20)
 
 show(block=False)
 
