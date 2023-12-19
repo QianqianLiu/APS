@@ -23,7 +23,9 @@ obs = loadz("/home/bootk/git_liu/APS/Obs/extract_noaa_sta_msl/noaa_elev_navd.npz
 #Create figure
 figure(figsize=[15, 6])
 # Set the x axis "times" based on one year (will display ad day/month as per str.
-xts,xls=get_xtick(fmt=2,xts=[datenum(2019,1,1),datenum(2019,12,31)],str='%b')
+#xts,xls=get_xtick(fmt=2,xts=[datenum(2019,1,1),datenum(2019,12,31)],str='%b')
+xts,xls=get_xtick(fmt=2,xts=[datenum(2002,1,1),datenum(2002,12,31)],str='%b')
+
 # Only show values/x axis points every 60 rows/2 months?? 
 xts,xls=xts[::60],xls[::60]; 
 
@@ -36,12 +38,12 @@ for st, sta in enumerate(stations):
    
     ind_19 = (obs.station == sta) & (obs.time >= datenum(2019, 1, 1)) & (obs.time < datenum(2019, 12, 31))
     oyi_19 = obs.elev[ind_19]
-    oyi_19 = oyi_19 - oyi_19.mean()  # Assign the elevation observations for 19
+    #oyi_19 = oyi_19 - oyi_19.mean()  # Assign the elevation observations for 19
 
-    foyi_19 = lpfilt(oyi_19, 1 / 24, 0.2)  # Low-pass filter on 19 observation data
+    foyi_19 = lpfilt(oyi_19, 1 / 24, 0.1)  # Low-pass filter on 19 observation data
 
     # Plot 19 data
-    plot(obs.time[ind_19], foyi_19, "b-", label='2019')
+    plot((obs.time[ind_19] - datenum(2019, 1, 1)), foyi_19, "b-", label='2019')
 
     # Define station observations from 01/01 - 12/31, 2002
     
@@ -51,13 +53,13 @@ for st, sta in enumerate(stations):
     if oyi_02.size == 0:
         print(f"No station data for 2002 at station {sta}")
     else:
-        oyi_02 = oyi_02 - oyi_02.mean()  # Assign the elevation observations for 2002
-        foyi_02 = lpfilt(oyi_02, 1 / 24, 0.2)  # Low-pass filter on 2002 observation data
-        plot(obs.time[ind_02], oyi_02, "r-", label='2002 Raw')
-        #plot(obs.time[ind_02], foyi_02, "r-", label='2002')
+        #oyi_02 = oyi_02 - oyi_02.mean()  # Assign the elevation observations for 2002
+        foyi_02 = lpfilt(oyi_02, 1 / 24, 0.1)  # Low-pass filter on 2002 observation data
+        #plot(obs.time[ind_02], oyi_02, "r-", label='2002 Raw')
+        plot((obs.time[ind_02] - datenum(2002, 1, 1)), foyi_02, "r-", label='2002')
         print('Size of oyi_02:', oyi_02.size)
 
-    setp(gca(), xticks=xts, xticklabels=xls, xlim=[datenum(2019, 1, 1), datenum(2019, 12, 31)], ylim=[-0.4, 0.6])
+    #setp(gca(), xticks=xts, xticklabels=xls, xlim=[datenum(2002, 1, 1), datenum(2002, 12, 31)], ylim=[-0.4, 0.6])
     plt.xticks(rotation=315)
     title("Station " + str(station_names[st]))
     plt.tight_layout()
@@ -71,6 +73,6 @@ show(block=False)
 #<<<<<<< HEAD
 #savefig('Compare_Elev_lpfilt_2019.png')
 #=======
-#savefig('wl_compare_2002_2019.png')
+savefig('wl_compare_2002_2019.png')
 #>>>>>>> e30840967c5adef90fd0f41c4aefe233a92c7285
 
