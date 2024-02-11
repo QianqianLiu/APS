@@ -32,6 +32,10 @@ for i,sta in enumerate([20, 30, 50, 70,100,160]):#enumerate(stations[1:19:3]): #
     plot(mod.time+datenum(2019,1,1),mod.temp[pdm,:],'b', label='Model')
     setp(gca(),xticks=Mond,xticklabels=[],xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[0,30])
     if i>3: setp(gca(),xticks=Mond,xticklabels=Datestr,xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[0,30])
+    if i>3:
+        plt.xlabel('Month')
+    if i ==2:
+        plt.ylabel('Temperature (\u00b0C)')
     xticks(rotation=70)
     title('Station {}'.format(sta))
     grid(linestyle = '--', linewidth = 0.5)
@@ -39,10 +43,10 @@ for i,sta in enumerate([20, 30, 50, 70,100,160]):#enumerate(stations[1:19:3]): #
         plt.legend()
     else:
         continue
-plt.suptitle('Temperature Comparison at NRE Stations - RUN2002a')
+plt.suptitle('Temperature Comparison at NRE Stations - RUN04d')
 
 show(block=False)
-savefig('figures_validate/Compare_Temp_NRE_RUN2002a.png')
+savefig('figures_validate/Compare_Temp_NRE_RUN04d.png')
 
 figure(figsize=[16, 6])
 xts,xls=get_xtick(fmt=2,xts=[datenum(2019,1,1),datenum(2019,12,30)],str='%d/%b')
@@ -60,6 +64,10 @@ for i,sta in enumerate([20, 30, 50,70,100,160]):#enumerate(stations[1:19:3]): #a
     plot(mod.time+datenum(2019,1,1),mod.salt[pdm,:],'b', label='Model')
     setp(gca(),xticks=Mond,xticklabels=[],xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[0,30])
     if i>3: setp(gca(),xticks=Mond,xticklabels=Datestr,xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[0,30])
+    if i>3:
+        plt.xlabel('Month')
+    if i ==2:
+        plt.ylabel('Salinity (PSU)')
     xticks(rotation=70)
     title('Station {}'.format(sta))
     grid(linestyle = '--', linewidth = 0.5)
@@ -67,9 +75,9 @@ for i,sta in enumerate([20, 30, 50,70,100,160]):#enumerate(stations[1:19:3]): #a
         plt.legend()
     else:
         continue
-plt.suptitle('Salinity Comparison at NRE Stations - RUN2002a')
+plt.suptitle('Salinity Comparison at NRE Stations - RUN04d')
 
 show(block=False)
-savefig('figures_validate/Compare_Salt_NRE_RUN2002a.png')
+savefig('figures_validate/Compare_Salt_NRE_RUN04d.png')
 
 

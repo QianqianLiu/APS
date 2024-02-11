@@ -9,6 +9,8 @@ lat_ps=c_[35.1201,35.15056667,35.13125,35.11841667,35.1225,35.08255,35.03205,35.
 S=loadz('/home/liuquncw/APS/Obs/ModMon/PS_WQ_2021.npz')
 mod=loadz('./mod_at_ps_wq_stations.npz')
 
+model_run_name = 'RUN04d'
+
 # make a sample plot
 figure(figsize=[16, 6])
 xts,xls=get_xtick(fmt=2,xts=[datenum(2019,1,1),datenum(2019,12,30)],str='%d/%b')
@@ -27,6 +29,10 @@ for i in arange(9):
     plot(mod.time+datenum(2019,1,1),mod.temp[i,:],'b', label='Model')
     setp(gca(),xticks=Mond, xticklabels=[], xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[0,30])
     if i>=6: setp(gca(),xticks=Mond,xticklabels=Datestr,xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[0,30])
+    if i ==7:
+        plt.xlabel('Month')
+    if i ==3:
+        plt.ylabel('Temperature (\u00b0C)')
     xticks(rotation=70)
     grid(linestyle = '--', linewidth = 0.5)
     title('Station {}'.format(i+1))
@@ -35,8 +41,8 @@ for i in arange(9):
     else:
         continue
 
-plt.suptitle('Temperature Comparison at PS Stations - RUN2002a')
-savefig('figures_validate/Compare_Temp_PS_WQ_RUN2002a.png')
+plt.suptitle('Temperature at PS Stations - {}'.format(model_run_name))
+savefig('figures_validate/Compare_Temp_PS_WQ_{}.png'.format(model_run_name))
 
 figure(figsize=[16, 6])
 xts,xls=get_xtick(fmt=2,xts=[datenum(2019,1,1),datenum(2019,12,30)],str='%d/%b')
@@ -50,14 +56,17 @@ for i in arange(9):
     setp(gca(),xticks=Mond, xticklabels=[], xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[0,30])
     if i>=6: setp(gca(),xticks=Mond,xticklabels=Datestr,xlim=[datenum(2019,1,1),datenum(2019,12,30)],ylim=[0,30])
     xticks(rotation=70)
+    if i==7:
+        plt.xlabel('Month')
+    if i==3:
+        plt.ylabel('Salinity (PSU)')
     grid(linestyle = '--', linewidth = 0.5)
     title('Station {}'.format(i+1))
     if i==1:
         plt.legend()
     else:
         continue
-plt.suptitle('Salinity Comparison at PS Stations - RUN2002a')
-
-#show(block=False)
-savefig('figures_validate/Compare_Salt_PS_WQ_RUN2002a.png')
+plt.suptitle('Salinity at PS Stations - {}'.format(model_run_name))
+plt.axis('on')
+savefig('figures_validate/Compare_Salt_PS_WQ_{}.png'.format(model_run_name))
 
