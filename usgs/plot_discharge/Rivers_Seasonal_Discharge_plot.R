@@ -1,146 +1,113 @@
 
-# Total drainage area of Tar-Pamlico River: 3220
-
-#setwd( "/home/liuq/SFlounder/Rivs/")
-setwd( "/Users/kboothomefolder/SFlounder/Rivs/")
+setwd( "/Users/kboothomefolder/git_liu/APS/usgs/")
+rm(list = ls())
 
 # Modify date and calculate discharge for available datasets 1978 - 2021
 # convert discharge from cubic feet per second (cfs) to cubic meters per second (cms)
 
+#Pasquotank   -- source_sink.in;  usgs station: 0204382800 - Pasquotank River near South Mills
+#Roanoke -- 2; usgs station: 02080500 - Roanoke River at Roanoke Rapids
+#Tar (Pamico River) -- 3; usgs station: 02084000 - Tar River at Greenville
+#Neuse -- 4; usgs station: 02091814 - Neuse River at Fort Barnwell
+#New -- source in source_sink.in; usgs station: 02093000 - New River near Gum Branch
+#Cape Fear -- 5; usgs station: 02105769 (Cape Fear R at Lock #1 NR Kelly NC) and USGS 02106500 BLACK RIVER NEAR TOMAHAWK, NC
 
-data <- read.table("TarAtGreenvile.txt",header = FALSE, sep = "", quote = "\"'", skip = 32)
-colnames(data) <- c("Org","Site","Date","HrMn","c1","discharge","c2")
-data$Time <- strptime(paste(as.character(data$Date),as.character(data$HrMn)),format="%Y-%m-%d %H:%M")
-data$TimeGMT <- data$Time+4*3600 ## from EDT to GMT ()
-data$Discharge <- data$discharge*0.0283168
-tar_greenvile <- data
+#############################################################################
 
-data <- read.table("TarAtRockyM.txt",header = FALSE, sep = "", quote = "\"'", skip = 34)
-colnames(data) <- c("Org","Site","Date","c1","c2","c3","c4","discharge","c5")
-data$Time <- strptime(as.character(data$Date),format="%Y-%m-%d")
-data$TimeGMT <- data$Time+4*3600 ## from EDT to GMT ()
-data$Discharge <- as.numeric(data$discharge)*0.0283168
-tar_rockym <- data
+library(dplyr)
 
-# drainage area: 2183
-data <- read.table("TarAtTarboro.txt",header = FALSE, sep = "", quote = "\"'", skip = 34)
-colnames(data) <- c("Org","Site","Date","c1","c2","c3","c4","discharge","c5")
-data$Time <- strptime(as.character(data$Date),format="%Y-%m-%d")
-data$TimeGMT <- data$Time+4*3600 ## from EDT to GMT ()
-data$Discharge <- as.numeric(data$discharge)*0.0283168
-tar_tarboro <- data
+calc_month_discharge <- function(file_path) {
+  data <- read.table(file_path,
+                     header = TRUE,  # Use the first row as column names
+                     sep = "\t",     # Assuming columns are tab-separated
+                     skip = 27,       # Skip lines of metadata and heading lines
+                     stringsAsFactors = FALSE)  # Prevent conversion of strings to factors
+  
+  colnames(data) <- c("USGS", "sta_no", "Time", "Timezone", "Discharge", "A")
+  
+  data$Time <- strptime(as.character(data$Time), format="%Y-%m-%d %H:%M")
+  data$Discharge <- data$Discharge * 0.0283168
+  data$Date <- as.Date(data$Time)
+  
+  daily_mean_discharge <- data %>%
+    group_by(Date) %>%
+    summarize(DailyMeanDischarge = mean(Discharge, na.rm = TRUE))
+  return(daily_mean_discharge)
+}
 
-data <- read.table("PamlicoAtWashington.txt",header = FALSE, sep = "", quote = "\"'", skip = 32)
-colnames(data) <- c("Org","Site","Date","c1","c2","c3","c4","discharge","c5")
-data$Time <- strptime(as.character(data$Date),format="%Y-%m-%d")
-data$TimeGMT <- data$Time+4*3600 ## from EDT to GMT ()
-data$Discharge <- data$discharge*0.0283168
-pamlico_washington <- data
+directory <- "/Users/kboothomefolder/git_liu/APS/usgs/"
 
-data <- read.table("Neuse_Kingston.txt",header = FALSE, sep = "", quote = "\"'", skip = 32)
-colnames(data) <- c("Org","Site","Date","c1","c2","c3","c4","discharge","c5")
-data$Time <- strptime(as.character(data$Date),format="%Y-%m-%d")
-data$TimeGMT <- data$Time+4*3600 ## from EDT to GMT ()
-data$discharge <- suppressWarnings(as.numeric(as.character(data$discharge))) # replace non-numeric with NA
-data$Discharge <- data$discharge*0.0283168
-neuse_kingston <- data
+files <- c("Neuse_02091814_2017_2019_15min.txt",
+           "Tar_02084000_2017_2019_15min.txt",
+           "Roanoke_02080500_2017_2019_15min.txt",
+           "Pasquotank_0204382800_2017_2019_15min.txt",
+           "New_02093000_2017_2019_15min.txt",
+           "CapeFear_02105769_2017_2019_15min.txt")
 
-# Check for numeric values in discharge array
-#discharge_numeric <- as.numeric(as.character(data$discharge))
-#non_numeric_values <- is.na(discharge_numeric)
-#num_non_numeric_values <- sum(non_numeric_values)
-#num_non_numeric_values
-# data$discharge <- suppressWarnings(as.numeric(as.character(data$discharge))) # replace non-numeric with NA
+file_paths <- file.path(directory, files)
+discharge_2019 <- lapply(file_paths, calc_month_discharge)
+names(discharge_2019) <- c("Neuse_Kingston", "Tar_Greenville", "Roanoke_Rapids","Pasquotank", "New", "Cape_Fear")
 
+# Filter datasets for the year 2019
+filter_2019 <- function(data) {
+  data %>% filter(Date >= as.Date("2019-01-01") & Date < as.Date("2020-01-01"))
+}
 
+neuse_kingston <- filter_2019(discharge_2019[[1]])
+tar_greenville <- filter_2019(discharge_2019[[2]])
+roanoke_rapids <- filter_2019(discharge_2019[[3]])
+pasquotank <- filter_2019(discharge_2019[[4]])
+new <- filter_2019(discharge_2019[[5]])
+cape_fear <- filter_2019(discharge_2019[[6]])
 
 ########################### Time Series Pamlico Sound Discharge ##############
+     
 
-# Plot two datasets used for riv.ann in GAM
-png(filename = "PS_discharge.png", width = 800, height = 600)
-plot(tar_tarboro$Time, tar_tarboro$Discharge, 
-     xlim = c(ISOdate(1978, 1, 1), ISOdate(2021, 1, 1)), 
-     type = 'l', col = 'green', 
-     xlab = 'Time', 
+png(filename = "discharge_2019.png", width = 1200, height = 800)
+par(mfrow = c(3, 1))  # 3 rows, 1 column
+
+# Subplot 1: Tar at Greenville and Neuse at Kingston
+plot(tar_greenville$Date, tar_greenville$DailyMeanDischarge, 
+     type = 'l', 
+     col = 'green',
      ylab = expression('Discharge (' * m^3 * '/s)'), 
-     main = 'River Discharge 1978 - 2021')
-lines(neuse_kingston$TimeGMT, neuse_kingston$Discharge, col = 'blue')
-legend('topleft', 
-       legend = c('Tar at Tarboro', 'Neuse at Kingston'), 
+     main = 'Tar at Greenville and Neuse at Kingston')
+lines(neuse_kingston$Date, neuse_kingston$DailyMeanDischarge, col = 'blue')
+legend('topright', 
+       legend = c('Tar at Greenville', 'Neuse at Kingston'), 
        col = c('green', 'blue'), 
        lty = 1, 
        bty = 'n',
-       cex=0.5)
-dev.off()
+       cex=0.9)
 
-# Plot two datasets used for riv.ann in GAM
-png(filename = "PS_discharge_2019.png", width = 800, height = 600)
-plot(tar_tarboro$Time, tar_tarboro$Discharge, 
-     xlim = c(ISOdate(2019, 1, 1), ISOdate(2020, 1, 1)), 
-     type = 'l', col = 'green', 
-     xlab = 'Time', 
+# Subplot 2: Roanoke Rapids and Pasquotank
+plot(pasquotank$Date, pasquotank$DailyMeanDischarge, 
+     type = 'l', 
+     col = 'red', 
      ylab = expression('Discharge (' * m^3 * '/s)'), 
-     main = 'River Discharge 2019')
-lines(neuse_kingston$TimeGMT, neuse_kingston$Discharge, col = 'blue')
-legend('topleft', 
-       legend = c('Tar at Tarboro', 'Neuse at Kingston'), 
-       col = c('green', 'blue'), 
+     main = 'New and Pasquotank')
+lines(new$Date, new$DailyMeanDischarge, col = 'purple')
+legend('topright', 
+       legend = c('Pasquotank', 'New'), 
+       col = c('red', 'purple'), 
        lty = 1, 
        bty = 'n',
-       cex=0.5)
+       cex=0.9)
+
+# Subplot 3: New and Cape Fear
+plot(roanoke_rapids$Date, roanoke_rapids$DailyMeanDischarge, 
+     type = 'l', 
+     col = 'orange', 
+     xlab = 'Time', 
+     ylab = expression('Discharge (' * m^3 * '/s)'), 
+     main = 'Roanoke and Cape Fear')
+lines(cape_fear$Date, cape_fear$DailyMeanDischarge, col = 'brown')
+legend('topright', 
+       legend = c('Roanoke', 'Cape Fear'), 
+       col = c('orange', 'brown'), 
+       lty = 1, 
+       bty = 'n',
+       cex=0.9)
+
 dev.off()
 
-# Add the lines for the other datasets - make sure to update the legend!
-#lines(tar_rockym$TimeGMT, tar_rockym$Discharge, col = 'purple')
-#lines(tar_greenvile$TimeGMT, tar_greenvile$Discharge, col = 'black')
-#lines(pamlico_washington$TimeGMT, pamlico_washington$Discharge, col = 'red')
-
-
-####################### Plot Monthly Mean Discharge for both stations #######3
-
-# Load required libraries
-library(dplyr)
-library(ggplot2)
-library(lubridate)
-
-# Calculate monthly mean discharge for Tarboro station
-tarboro_monthly_mean <- tar_tarboro %>%
-  mutate(Month = month(Time)) %>%
-  group_by(Month) %>%
-  summarize(MonthlyMeanDischarge = mean(Discharge, na.rm = TRUE))
-
-# Calculate monthly mean discharge for Kingston station
-kingston_monthly_mean <- neuse_kingston %>%
-  mutate(Month = month(TimeGMT)) %>%
-  group_by(Month) %>%
-  summarize(MonthlyMeanDischarge = mean(Discharge, na.rm = TRUE))
-
-# Combine both datasets for plotting
-combined_data <- bind_rows(
-  tarboro_monthly_mean %>% mutate(Station = "Tar at Tarboro"),
-  kingston_monthly_mean %>% mutate(Station = "Neuse at Kingston")
-)
-
-# Plot the data using ggplot2
-ggplot(combined_data, aes(x = Month, y = MonthlyMeanDischarge, color = Station)) +
-  geom_point() +  
-  geom_line() +   
-  scale_x_continuous(breaks = 1:12, labels = month.name) +  # Label x-axis with month names
-  labs(title = "Average Monthly Discharge (1978-2021)",
-       x = "Month",
-       y = expression('Discharge (' * m^3 * '/s)')) +
-  theme_minimal() +
-  scale_color_manual(values = c("green", "blue")) +
-  theme(
-    legend.title = element_blank(),
-    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels
-    legend.position = c(0.95, 0.95),  # Position legend inside the plot area (top right)
-    legend.justification = c("right", "top"),  # Adjust legend alignment
-    plot.title = element_text(hjust = 0.5),  # Center the title
-    panel.grid.major = element_blank(),  # Remove major grid lines
-    #panel.grid.minor = element_blank()   # Remove minor grid lines
-  )
-
-ggsave("monthly_average_discharge.png", width = 10, height = 6)
-
-# monthly plot for Pasquotank, Roanoke, Tar, Neuse, New, Cape Fear, Black
