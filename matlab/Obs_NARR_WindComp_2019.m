@@ -1,22 +1,22 @@
 %% Compare wind data from NARR and NOAA NDBC HCGN7
 
-% from HCGN7
-load HCGN7H_2019.txt %% time in UTC
-OBS=HCGN7H_2019;
+% % from HCGN7
+% load HCGN7H_2019.txt %% time in UTC
+% OBS=HCGN7H_2019;
+% 
+% time2=datenum(OBS(:,1),OBS(:,2),OBS(:,3),OBS(:,4),OBS(:,5),OBS(:,1).*0);
+% Wdir2=OBS(:,6);
+% Wnd2=OBS(:,7);
+% Tair2=OBS(:,14);
+% Tdew2=OBS(:,16);
+% 
+% % Convert wind speed and direction to Ugeo and Vgeo
+% RperD=pi/180;
+% Ugeo2=-Wnd2.*sin(Wdir2*RperD);
+% Vgeo2=-Wnd2.*cos(Wdir2*RperD);
 
-time2=datenum(OBS(:,1),OBS(:,2),OBS(:,3),OBS(:,4),OBS(:,5),OBS(:,1).*0);
-Wdir2=OBS(:,6);
-Wnd2=OBS(:,7);
-Tair2=OBS(:,14);
-Tdew2=OBS(:,16);
 
-% Convert wind speed and direction to Ugeo and Vgeo
-RperD=pi/180;
-Ugeo2=-Wnd2.*sin(Wdir2*RperD);
-Vgeo2=-Wnd2.*cos(Wdir2*RperD);
-
-
-% wind data from NARR
+% load wind data from NARR
 
 air1='/Users/qianqianliu/Documents/Research/NorthCarolinaCoastal/Input/sflux/sflux_air_1.0275.nc'
 lon=double(ncread(air1,'lon'));
