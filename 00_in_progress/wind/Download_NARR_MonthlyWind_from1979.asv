@@ -61,18 +61,13 @@ dir_seas(:,si)=dir_si;
 end
 
 for si=1:4
-   close all;
-%WindRose(dir_seas(:,si), mag_seas(:,si))
-wind_rose(dir_seas(:,si), mag_seas(:,si),'dtype','meteo',...
-    'di',[0;1;2;3;4;5;6;7;8;9;10],'ci',[4 10])
+WindRose(dir_seas(:,si), mag_seas(:,si))
+%wind_rose(dir_seas(:,si), mag_seas(:,si),'dtype','meteo',...
+    %'di',[0;1;2;3;4;5;6;7;8],'ci',[4 6])
 exportgraphics(gcf,['SeasonalWinds_',num2str(si),'_From1979.png'],'Resolution',300)
 end
 
-close all;
-figure
-wind_rose(dir, mag,'dtype','meteo',...
-    'di',[0;1;2;3;4;5;6;7;8;9;10],'ci',[4 10])
-exportgraphics(gcf,['SeasonalWinds_From1979.png'],'Resolution',300)
+
 
 %%%%%%%%%%%%%%%%%%%%% All data Rose plots ########################
 
