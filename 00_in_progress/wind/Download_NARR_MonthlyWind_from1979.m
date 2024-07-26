@@ -34,7 +34,11 @@ save('wind_monthly.txt','wind','-ascii')
 
 %%%%%%%%%%% Make windrose diagrams %%%%%%%%%%%%%%%%%%%%%%%%%
 mag = sqrt(uwnd.^2 + vwnd.^2);
-dir = atan2d(vwnd, uwnd);  % atan2d returns the angle in degrees
+%dir = atan2d(vwnd, uwnd);  % not returning the right meteorological direction
+dir=270-atan2(vwnd,uwnd)*180/pi;
+
+%convert from hrs from 1800,1,1 to datestr
+%datestr(wind_monthly(:,1)/24+datenum(1800,1,1))
 
 
 % Spring - April 1 - July 1 (4-6) - May
