@@ -1,6 +1,6 @@
 
 % Load u-wind and v-wind components from NARR 
-% Time is January 1979 through June 2024
+% Time is January 1979 through June 2023
 
 clear;clc;close all
 url_u='http://psl.noaa.gov/thredds/dodsC/Datasets/NARR/Monthlies/monolevel/uwnd.10m.mon.mean.nc?time[0:1:537],lat[109:1:109][262:1:262],lon[109:1:109][262:1:262],uwnd[0:1:200][109:1:109][262:1:262]';
@@ -64,19 +64,21 @@ dir_seas(:,si)=dir_si;
 
 end
 
+seasons = {'Winter', 'Spring', 'Summer', 'Fall'};
 for si=1:4
    close all;
-%WindRose(dir_seas(:,si), mag_seas(:,si))
-wind_rose(dir_seas(:,si), mag_seas(:,si),'dtype','meteo',...
-    'di',[0;1;2;3;4;5;6;7;8;9;10],'ci',[4 10])
-exportgraphics(gcf,['SeasonalWinds_',num2str(si),'_From1979.png'],'Resolution',300)
+   wind_rose(dir_seas(:,si), mag_seas(:,si),'dtype','meteo',...
+    'di',[0;1;2;3;4;5;6;7;8;9;10],'ci',[4 6 8 10 12 14])
+   title(seasons{si},'1979 - 2022');
+   exportgraphics(gcf,['SeasonalWinds_',seasons{si},'_From1979.png'],'Resolution',300)
 end
 
 close all;
 figure
 wind_rose(dir, mag,'dtype','meteo',...
-    'di',[0;1;2;3;4;5;6;7;8;9;10],'ci',[4 10])
-exportgraphics(gcf,['SeasonalWinds_From1979.png'],'Resolution',300)
+    'di',[0;1;2;3;4;5;6;7;8;9;10],'ci',[4 6 8])
+title('Wind Direction and Magnitude 1979 - 2022')
+exportgraphics(gcf,['SeasonalWinds_From1979to2022.png'],'Resolution',300)
 
 %%%%%%%%%%%%%%%%%%%%% All data Rose plots ########################
 
@@ -84,37 +86,4 @@ exportgraphics(gcf,['SeasonalWinds_From1979.png'],'Resolution',300)
 % figure;
 % WindRose(dir, mag);
 % filename = 'windrose_plot_1979to2023.png';
-% saveas(gcf, filename);
-
-%%%%%%%%%%%%%%%%%%%%% Seasonal Rose plots ########################
-% Spring - April 1 - July 1 (4-6) - May
-% Summer: July 1 - October 1(7-9) - August
-% Fall: October 1 - January 1 (10-12) - November
-% Winter: January 1 - April 1 (1-3) - February
-
-% Plot with wind rose subplot for each month
-for i = 1:12;
-    dir_seas = dir(i,:);
-    mag_seas = mag(i,:);
-    figure;
-    WindRose(dir_1, mag_1);
-    tt = ['Month ', num2str(i)];
-    thandle = title(tt);
-    titlePosition = get(thandle, 'Position'); 
-    titlePosition(2) = titlePosition(2) + 0.1; 
-    set(thandle, 'Position', titlePosition); 
-    filename = ['windrose_plot_1979to2023_', num2str(i), '.png'];
-    saveas(gcf, filename);
-end
-
-
-%%%%%%%%%%%%%%%%%%%%% Avg Monthly Rose plots ########################
-
-% Average for each month
-% for i = 1:12;
-%     i
-%     ind = i:12:length(mag); % Extract index for every 12th value 
-%     mag_vales = mag(ind); % extract values
-%     mo_avg = mean(mag_vales);
-%     mag_av = [mag_av; mo_avg];
-% end
+% saveas(gcf, filename);m

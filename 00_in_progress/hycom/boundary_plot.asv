@@ -1,0 +1,18 @@
+% Plot ocean boundary 
+clear all
+load Obc_SLR_2098-2019_ssp370.txt
+load Obc_SLR_2098-2019_SSP585.txt
+
+obc_ssp370_ann=mean(Obc_SLR_2098_2019_ssp370,2);
+obc_ssp585_ann=mean(Obc_SLR_2098_2019_SSP585,2);
+
+figure
+plot(obc_ssp585_ann,'r')
+hold on
+plot(obc_ssp370_ann,'b')
+title('Sensitivity Experiment HYCOM Adjustment - SSP585 and SSP370')
+legend('SSP585', 'SSP370')
+xlabel('Open Boundary Node Number')
+ylabel('Mean Sea Level (m)')
+grid on
+hold off
