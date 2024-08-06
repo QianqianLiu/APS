@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from pylib import *
-from sklearn.metrics import r2_score, mean_squared_error
+#from sklearn.metrics import r2_score, mean_squared_error
 import numpy as np
 
 # Import stations and extract points from model outputs
@@ -21,7 +21,14 @@ datetime = num2date(Mond)
 Datestr = [datetime[i].strftime('%m') for i in range(23)]
 
 # Initialize r-squared array for all stations
-r_sq_df = np.full(len(stations), np.nan)
+r_df = np.full(len(stations), np.nan)
+#r_sq_df = np.full(len(stations), np.nan)
+
+def calculate_r_value(observed, modeled):
+    # Calculate the correlation matrix
+    corr_matrix = np.corrcoef(observed, modeled)
+    # Extract the correlation coefficient
+    return corr_matrix[0, 1]
 
 for i, sta in enumerate([20, 30, 50, 70, 100, 160]):
     print(i)
@@ -35,13 +42,22 @@ for i, sta in enumerate([20, 30, 50, 70, 100, 160]):
     model_temps_at_observed_times = np.interp(obs_times, mod_times, mod.temp[pdm, :])
 
     # Calculate R-squared
-    r_sq = r2_score(S.temp[pd], model_temps_at_observed_times)
-    r_sq_df[pdm] = r_sq  # index into r_sq_df
-    print(f"station {sta}, Temp R-Squared: {r_sq}")
+    #r_sq = r2_score(S.temp[pd], model_temps_at_observed_times)
+    #r_sq_df[pdm] = r_sq  # index into r_sq_df
+    #print(f"station {sta}, Temp R-Squared: {r_sq}")
+
+    # calculate R-values
+    r_val = calculate_r_value(S.temp[pd], model_temps_at_observed_times)
+    r_df[pdm] = r_val 
+    #print(f"station {sta}, Temp R-Squared: {r_sq}")
+    print(f"station {sta}, Temp R-value: {r_val}")
+
 
 # Print r-squared values for all stations
 print("Final R-Squared values for all stations:")
 print(r_sq_df)
+print("Final R-values for all stations:")
+print(r_df)
 
 # note nan values are stations not selected in enumerate
 
