@@ -9,7 +9,8 @@ bp = read_schism_bpfile(bpfile)
 stations = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180]
 
 S = loadz('/home/liuquncw/APS/Obs/ModMon/NRE_WQ_2019.npz')
-mod = loadz('./mod_at_nre_stations.npz')
+#mod = loadz('./mod_at_nre_stations.npz')
+mod = loadz('/expanse/lustre/projects/unc107/kboot/ModelResults/RUN04d/mod_at_nre_stations.npz')
 model_run_name = 'RUN04d'
 model_run_descrip = '2019 Hindcast Simulation'
 
