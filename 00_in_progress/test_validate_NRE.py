@@ -15,7 +15,7 @@ model_run_name = 'RUN04d'
 model_run_descrip = '2019 Hindcast Simulation'
 
 # Convert timesteps to datestr
-mond = [datenum(2018, i + 1, 1) for i in range(23)]
+mond = [datenum(2019, i + 1, 1) for i in range(23)]
 Mond = np.array(mond)
 mons = Mond * 24 * 3600
 datetime = num2date(Mond)
@@ -34,13 +34,24 @@ def calculate_r_value(observed, modeled):
 for i, sta in enumerate([20, 30, 50, 70, 100, 160]):
     print(i)
 
-    pd = (S.station == sta) & (S.depthcat == "S")
+    pd = (S.station == sta) & (S.depthcat == "S") & (S.time >= datenum(2019,1,1)) & (S.time < datenum(2020,1,1))
+    #pd = (S.station == 20) & (S.depthcat == "S") & (S.time >= datenum(2019,1,1)) & (S.time < datenum(2020,1,1))
     pdm = stations.index(sta)
+    #pdm = stations.index(20)
 
     # Extract model points at same timesteps as observed
-    obs_times = S.time[pd]
+    # take observation time and limit to only 2019
+    obs_times = S.time[pd] # this is a datenum
     mod_times = mod.time + datenum(2019, 1, 1)
     model_temps_at_observed_times = np.interp(obs_times, mod_times, mod.temp[pdm, :])
+    
+    # Make a quick plot before R-squared calculation
+    figure(figsize=[8,4])
+    plot(obs_times, model_temps_at_observed_times,'-*b')
+    #plot(obs_times, S.temp[pd], "-*r")
+    plot(obs_times, S.temp[20], "-*r")
+    savefig('figures_validate/sta_{}.png'.format(sta))
+
 
     # Calculate R-squared
     #r_sq = r2_score(S.temp[pd], model_temps_at_observed_times)
@@ -53,7 +64,7 @@ for i, sta in enumerate([20, 30, 50, 70, 100, 160]):
     #print(f"station {sta}, Temp R-Squared: {r_sq}")
     print(f"station {sta}, Temp R-value: {r_val}")
 
-
+#scp -r kboot@login.expanse.sdsc.edu:/expanse/lustre/projects/unc107/kboot/ModelResults/RUN04d/figures_validate/*.png .
 # Print r-squared values for all stations
 print("Final R-Squared values for all stations:")
 print(r_sq_df)
