@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from pylib import *
-#from sklearn.metrics import r2_score, mean_squared_error
+from sklearn.metrics import r2_score, mean_squared_error
 import numpy as np
 
 # Import stations and extract points from model outputs
@@ -23,13 +23,20 @@ Datestr = [datetime[i].strftime('%m') for i in range(23)]
 
 # Initialize r-squared array for all stations
 r_df = np.full(len(stations), np.nan)
+rmse_df = np.full(len(stations), np.nan)
+
 #r_sq_df = np.full(len(stations), np.nan)
 
-def calculate_r_value(observed, modeled):
+def calc_r_value(observed, modeled):
     # Calculate the correlation matrix
     corr_matrix = np.corrcoef(observed, modeled)
     # Extract the correlation coefficient
     return corr_matrix[0, 1]
+
+def calc_rmse_value(observed, modeled):
+    mse = mean_squared_error(observed, modeled)
+    rmse = np.sqrt(mse) # root of mse
+    return rmse
 
 for i, sta in enumerate([20, 30, 50, 70, 100, 160]):
     print(i)
@@ -43,33 +50,35 @@ for i, sta in enumerate([20, 30, 50, 70, 100, 160]):
     # take observation time and limit to only 2019
     obs_times = S.time[pd] # this is a datenum
     mod_times = mod.time + datenum(2019, 1, 1)
-    model_temps_at_observed_times = np.interp(obs_times, mod_times, mod.temp[pdm, :])
+    mod_temps_at_obs_times = np.interp(obs_times, mod_times, mod.temp[pdm, :])
     
     # Make a quick plot before R-squared calculation
-    figure(figsize=[8,4])
-    plot(obs_times, model_temps_at_observed_times,'-*b')
+    #figure(figsize=[8,4])
+    #plot(obs_times, model_temps_at_observed_times,'-*b')
     #plot(obs_times, S.temp[pd], "-*r")
-    plot(obs_times, S.temp[20], "-*r")
-    savefig('figures_validate/sta_{}.png'.format(sta))
-
+    #plot(obs_times, S.temp[20], "-*r")
+    #savefig('figures_validate/sta_{}.png'.format(sta))
 
     # Calculate R-squared
     #r_sq = r2_score(S.temp[pd], model_temps_at_observed_times)
     #r_sq_df[pdm] = r_sq  # index into r_sq_df
     #print(f"station {sta}, Temp R-Squared: {r_sq}")
 
-    # calculate R-values
-    r_val = calculate_r_value(S.temp[pd], model_temps_at_observed_times)
-    r_df[pdm] = r_val 
+    # calculate R-values and RMSE
+    r_val = calc_r_value(S.temp[pd], mod_temps_at_obs_times).round(3)
+    rmse_val = calc_rmse_value(S.temp[pd], mod_temps_at_obs_times).round(2)
+    r_df[pdm] = r_val
+    rmse_df[pdm] = rmse_val
+
     #print(f"station {sta}, Temp R-Squared: {r_sq}")
-    print(f"station {sta}, Temp R-value: {r_val}")
+    print(f"station {sta}, Temp R-value: {r_val}, Temp RMSE: {rmse_val}")
 
 #scp -r kboot@login.expanse.sdsc.edu:/expanse/lustre/projects/unc107/kboot/ModelResults/RUN04d/figures_validate/*.png .
 # Print r-squared values for all stations
-print("Final R-Squared values for all stations:")
-print(r_sq_df)
-print("Final R-values for all stations:")
+print("Final RMSE values for all stations:")
 print(r_df)
+print("Final R-values for all stations:")
+print(rmse_df)
 
 # note nan values are stations not selected in enumerate
 
