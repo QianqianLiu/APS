@@ -110,9 +110,14 @@ if isinstance(txy,str) or array(txy[0]).ndim==1: txy=[txy]
 rdp=read_schism_bpfile; txy=[[rdp(i).x,rdp(i).y] if isinstance(i,str) else i for i in txy]
 
 #read grid in outputs folder
+#fgz=run+'/grid.npz'; fgd=run+'/hgrid.gr3'; fvd=run+'/vgrid.in'
+#gd=loadz(fgz,'hgrid') if fexist(fgz) else read_schism_hgrid(fgd)
+#vd=loadz(fgz,'vgrid') if fexist(fgz) else read_schism_vgrid(fvd)
+
+# Katy's modified 9/18
 fgz=run+'/grid.npz'; fgd=run+'/hgrid.gr3'; fvd=run+'/vgrid.in'
-gd=loadz(fgz,'hgrid') if fexist(fgz) else read_schism_hgrid(fgd)
-vd=loadz(fgz,'vgrid') if fexist(fgz) else read_schism_vgrid(fvd)
+gd=read_schism_hgrid(fgd)
+vd=read_schism_vgrid(fvd)
 
 #compute transect information - take point coordinates, divide 
 nps,dsa=[],[]; # number of points nps and segment distances (?) dsa
@@ -149,6 +154,7 @@ S=zdata(); S.time=[]; S.flux=[[] for i in txy]; S.tflux=[[[] for i in txy] for i
 for istack in stacks:
     if istack%nproc!=myrank: continue
     t00=time.time(); 
+    #C=read_schism_output(run,['zcor','hvel',*svars],c_[sx,sy],istack,nspool=nspool,hgrid=gd,vgrid=vd,fmt=1) #read profile
     C=read_schism_output(run,['zcor','hvel',*svars],c_[sx,sy],istack,nspool=nspool,hgrid=gd,vgrid=vd,fmt=1) #read profile
     for m,npt in enumerate(nps): #for each transect
         sind=sinds[m]; angle=angles[m][:,None,None]; ds=dsa[m][:,None,None]
