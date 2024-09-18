@@ -2,9 +2,23 @@
 '''
 Compute fluxes based on SCHISM node information
 '''
-from pylib import *
 
-# Annotated by Katy Boot 9/8/2024
+# Modify environment if  running on login node
+#pip install matplotlib
+#pip install os-sys
+#pip install scipy
+#pip install netCDF4
+
+# ***** Currently running on compute node
+#import matplotlib
+#import os
+#import netCDF4
+
+from pylib import *
+import time
+
+
+# Annotated by Katy Boot 9/17/2024
 #-----------------------------------------------------------------------------
 #Input
 #hpc: kuro, femto, bora, potomac, james, frontera, levante, stampede2
@@ -28,7 +42,7 @@ Matching to other pextract files we've used for validation
 
 '''
 #run='/home/g/g260135/work/wangzg/DSP/RUN08a'
-run = '/expanse/lustre/projects/unc107/liuquncw/schism/RUN04d/outputs'
+run = '/expanse/lustre/projects/unc107/liuquncw/schism/RUN04d' # outputs
 svars=['salt'] # update to correct tracer name (ie salt, temp, etc. as per SCHISM variable outputs)
 txy = 'transect_ore.bp' # create new file for Oregon inlet transect
 #txy=[[[630597.229,630752.001], [4257510.76,4257544.77]],      #1st transect: [xi,yi]
@@ -38,7 +52,8 @@ txy = 'transect_ore.bp' # create new file for Oregon inlet transect
 sname='RUN04d/flux' # update flux calc output directory # need to create folder or not?
 
 #optional
-stacks=[73]    #output stacks # to test, select one stack to break down, otherwise [1,73] for regular run
+stacks=[1,2]    #output stacks # to test, select one stack to break down, otherwise [1,73] for regular run
+# note stacks needs two values (Start and end)
 #nspool=12       #sub-sampling frequency within each stack (1 means all)
 nspool=1       #sub-sampling frequency within each stack (1 means all)
 #dx=10          #interval of sub-section, used to divide transect
@@ -83,11 +98,15 @@ if myrank==0: t0=time.time()
 #-----------------------------------------------------------------------------
 if 'nspool' not in locals(): nspool=1       #subsample
 if 'rvars' not in locals(): rvars=svars     #rename variables
-modules, outfmt, dstacks, dvars, dvars_2d=get_schism_output_info(run+'/outputs',1) #schism outputs info
-stacks=arange(stacks[0],stacks[1]+1) if ('stacks' in locals()) else dstacks #check stacks
 
-#check format of transects
+modules, outfmt, dstacks, dvars, dvars_2d=get_schism_output_info(run+'/outputs',1) #schism outputs info
+
+################# error here - solved, stacks needs two values
+
+stacks=arange(stacks[0],stacks[1]+1) if ('stacks' in locals()) else dstacks #check stacks
 if isinstance(txy,str) or array(txy[0]).ndim==1: txy=[txy]
+
+############### error here, bp file not found
 rdp=read_schism_bpfile; txy=[[rdp(i).x,rdp(i).y] if isinstance(i,str) else i for i in txy]
 
 #read grid in outputs folder
@@ -105,7 +124,7 @@ for m,[x0,y0] in enumerate(txy):
     #compute transect pts -- along distance dx or total between the two end points
     x0=array(x0); y0=array(y0)
     if 'dx' in locals():  #divide transect evenly
-       ds=abs(diff(x0+1j*y0)); # find segment distance
+       ds=abs(diff(x0+1j*y0)); # find segment distance, one value per distance
        s=cumsum([0,*ds]); # cumulative sum of ds segment distances
        npt=int(s[-1]/dx)+1; # find number of points needed for even division of each segment in transect
        ms=linspace(0,s[-1],npt) # generate points until the last point (Transect end)
@@ -113,6 +132,8 @@ for m,[x0,y0] in enumerate(txy):
     else:
        xi,yi=x0,y0;
     npt=len(xi); ds=abs(diff(xi+1j*yi))
+
+    ## ************ ERROR?? *************************
     if sum(gd.inside_grid(c_[xi,yi])==0)!=0: sys.exit('pts outside of domain: {}'.format(m))
     if 'prj' in locals(): pxi,pyi=proj_pts(xi,yi,'epsg:4326',prj); ds=abs(diff(pxi+1j*pyi))
 
@@ -127,10 +148,14 @@ for m,[x0,y0] in enumerate(txy):
 S=zdata(); S.time=[]; S.flux=[[] for i in txy]; S.tflux=[[[] for i in txy] for i in svars]
 for istack in stacks:
     if istack%nproc!=myrank: continue
-    t00=time.time(); C=read_schism_output(run,['zcor','hvel',*svars],c_[sx,sy],istack,nspool=nspool,hgrid=gd,vgrid=vd,fmt=1) #read profile
+    t00=time.time(); 
+    C=read_schism_output(run,['zcor','hvel',*svars],c_[sx,sy],istack,nspool=nspool,hgrid=gd,vgrid=vd,fmt=1) #read profile
     for m,npt in enumerate(nps): #for each transect
         sind=sinds[m]; angle=angles[m][:,None,None]; ds=dsa[m][:,None,None]
-        dz=diff(C.zcor[sind],axis=2); dz=(dz[:-1]+dz[1:])/2; dz[dz<0]=0
+        
+        dz=diff(C.zcor[sind],axis=2); 
+        dz=(dz[:-1]+dz[1:])/2; 
+        dz[dz<0]=0
         U=C.hvel[sind]; U=(U[:-1,:,:-1]+U[:-1,:,1:]+U[1:,:,:-1]+U[1:,:,1:])/4; u,v=U[...,0],U[...,1]
 
         #volume flux, and tracers flux
