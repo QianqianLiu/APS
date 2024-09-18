@@ -43,7 +43,6 @@ show(block=False)
 
 #savefig('Compare_Elev_Sept_RUN04d.png')
 plt.suptitle('Elevation Comparison at NOAA Stations - September 2019 - {}'.format(model_run_descrip), fontsize = 20)
-#plt.suptitle('Temperature Comparison at NRE Stations - {}'.format(model_run_descrip))
 savefig('figures_validate/Compare_Elev_Sept_{}.png'.format(model_run_name))
 
 
