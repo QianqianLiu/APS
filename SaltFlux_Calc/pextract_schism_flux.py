@@ -42,24 +42,28 @@ Matching to other pextract files we've used for validation
 
 '''
 #run='/home/g/g260135/work/wangzg/DSP/RUN08a'
-run = '/expanse/lustre/projects/unc107/liuquncw/schism/RUN04d' # outputs
-svars=['salt'] # update to correct tracer name (ie salt, temp, etc. as per SCHISM variable outputs)
-txy = 'transect_ore.bp' # create new file for Oregon inlet transect
+run = '..' # outputs
+svars=['salt',] # update to correct tracer name (ie salt, temp, etc. as per SCHISM variable outputs)
+#txy = 'transect_ore.bp' # create new file for Oregon inlet transect
 #txy=[[[630597.229,630752.001], [4257510.76,4257544.77]],      #1st transect: [xi,yi]
      #'transect_2.bp',                                         #2nd transect; ts2.bp
      #[[519390, 522149, 525018],[4186127, 4180971, 4177533]] ] #3rd transect
 
+##txy=[[[-75.5358,-75.5281],[35.7757,35.7727]]]
+txy=[[[451573.01915284, 452267.17836854],[3959203.14773268, 3958866.63436274]]]
+
 sname='RUN04d/flux' # update flux calc output directory # need to create folder or not?
 
 #optional
-stacks=[1,2]    #output stacks # to test, select one stack to break down, otherwise [1,73] for regular run
+stacks=[10,11]    #output stacks # to test, select one stack to break down, otherwise [1,73] for regular run
+#stacks=[10]    #output stacks # to test, select one stack to break down, otherwise [1,73] for regular run
 # note stacks needs two values (Start and end)
 #nspool=12       #sub-sampling frequency within each stack (1 means all)
-nspool=1       #sub-sampling frequency within each stack (1 means all)
+#nspool=1       #sub-sampling frequency within each stack (1 means all)
 #dx=10          #interval of sub-section, used to divide transect
-dx=10          #interval of sub-section, used to divide transect ** How many divisions in tr
+dx=30          #interval of sub-section, used to divide transect ** How many divisions in tr
 #prj='cpp'      #projection that convert lon&lat to local project when ics=2
-rvars=['salt'] #rname the varibles
+#rvars=['salt'] #rname the varibles
 
 #resource requst
 #walltime='00:10:00'; nnode=1;  ppn=4
